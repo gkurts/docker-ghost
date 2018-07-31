@@ -17,6 +17,15 @@ if [[ "$*" == node*current/index.js* ]]; then
 			tar -cC "$(dirname "$src")" "$(basename "$src")" | tar -xC "$(dirname "$target")"
 		fi
 	done
+	
+	# remove the symlink to the casper theme and put the actual files there.
+	# this will require manually updating the latest version but if we're developing
+	# new themes then we really shouldn't care. I think.
+	rm $GHOST_CONTENT/themes/casper
+	echo "rm'd the casper symlink."
+
+	cp -r $GHOST_INSTALL/current/content/themes/casper $GHOST_CONTENT/themes/casper
+	echo "cp'd the casper files to the theme folder."
 
 	knex-migrator-migrate --init --mgpath "$GHOST_INSTALL/current"
 fi
