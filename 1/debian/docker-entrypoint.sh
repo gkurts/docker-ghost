@@ -21,11 +21,14 @@ if [[ "$*" == node*current/index.js* ]]; then
 	# remove the symlink to the casper theme and put the actual files there.
 	# this will require manually updating the latest version but if we're developing
 	# new themes then we really shouldn't care. I think.
-	rm $GHOST_CONTENT/themes/casper
-	echo "rm'd the casper symlink."
+	if [[ -e "$GHOST_CONTENT/themes/casper" && -L "$GHOST_CONTENT/themes/casper" ]]
+	then
+		rm $GHOST_CONTENT/themes/casper
+		echo "rm'd the casper symlink."
 
-	cp -r $GHOST_INSTALL/current/content/themes/casper $GHOST_CONTENT/themes/casper
-	echo "cp'd the casper files to the theme folder."
+		cp -r $GHOST_INSTALL/current/content/themes/casper $GHOST_CONTENT/themes/casper
+		echo "cp'd the casper files to the theme folder."
+	fi
 
 	knex-migrator-migrate --init --mgpath "$GHOST_INSTALL/current"
 fi
